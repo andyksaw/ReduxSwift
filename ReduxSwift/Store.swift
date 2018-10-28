@@ -9,12 +9,18 @@
 public protocol StoreState {}
 
 public final class Store<State> where State: StoreState {
-    private var listeners: [StoreListenable] = []
+    private typealias Listener = (StoreState) -> Void
+    private typealias ListenerKey = Int
+
+    private var listeners = [ListenerKey: Listener]()
+    private var orderedListeners = [ListenerKey]()
     private let reducers: [StoreReducer]
 
     private var state: State {
         didSet {
-            listeners.forEach { $0.stateDidUpdate(state, oldState: oldValue) }
+            listeners.forEach { (_, propagateState) in
+                propagateState(state)
+            }
         }
     }
 
@@ -23,27 +29,45 @@ public final class Store<State> where State: StoreState {
         self.reducers = reducers
     }
 
-    public func subscribe(_ listener: StoreListenable) {
-        listeners.append(listener)
+    public func subscribe<Listenable: StoreListenable>(_ listener: Listenable) where Listenable.BoundState.State == State {
+        let identifier = listener.hashValue
+
+        orderedListeners.append(identifier)
+        listeners[identifier] = { [weak listener] state in
+            guard let listener = listener else { return }
+            guard let boundState = state as? Listenable.BoundState.State else { return }
+            let stateSlice = Listenable.BoundState.init(state: boundState)
+            listener.stateDidUpdate(stateSlice)
+        }
 
         // send the current state to a listener immediately when it
         // subscribes so that it can display something if needed
-        listener.stateDidUpdate(state, oldState: nil)
+        let stateSlice = Listenable.BoundState.init(state: state)
+        listener.stateDidUpdate(stateSlice)
     }
 
-    public func unsubscribe(_ listener: StoreListenable) {
-        listeners = listeners.filter { $0 !== listener }
+    public func unsubscribe<Listenable: StoreListenable>(_ listener: Listenable) {
+        let identifier = listener.hashValue
+
+        orderedListeners = orderedListeners.filter { $0.hashValue != identifier }
+        listeners.removeValue(forKey: identifier)
     }
 
-    public func update<Action: StoreAction>(with action: Action) {
+    public func dispatch<Action: StoreAction>(action: Action) {
         state = reducers.reduce(into: state) { currentState, reducer in
             currentState = reducer.reduce(with: action, currentState: currentState)
         }
     }
 }
 
-public protocol StoreListenable: class {
-    func stateDidUpdate(_ state: StoreState, oldState: StoreState?)
+public protocol StoreStateSlice {
+    associatedtype State: StoreState
+    init(state: State)
+}
+
+public protocol StoreListenable: class, Hashable {
+    associatedtype BoundState: StoreStateSlice
+    func stateDidUpdate(_ state: BoundState)
 }
 
 public protocol StoreReducer {

@@ -12,6 +12,7 @@
 		054D8A5E2185FC9100192DA9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 054D8A5C2185FC9100192DA9 /* Main.storyboard */; };
 		054D8A602185FC9100192DA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 054D8A5F2185FC9100192DA9 /* Assets.xcassets */; };
 		054D8A632185FC9100192DA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 054D8A612185FC9100192DA9 /* LaunchScreen.storyboard */; };
+		054D8A6F218629B600192DA9 /* ReduxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 054D8A6E218629B600192DA9 /* ReduxSwift.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		054D8A5F2185FC9100192DA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		054D8A622185FC9100192DA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		054D8A642185FC9100192DA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		054D8A6E218629B600192DA9 /* ReduxSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ReduxSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				054D8A6F218629B600192DA9 /* ReduxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -40,6 +43,7 @@
 			children = (
 				054D8A572185FC9100192DA9 /* ReduxSwiftExamples */,
 				054D8A562185FC9100192DA9 /* Products */,
+				054D8A6D218629B600192DA9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,6 +66,14 @@
 				054D8A642185FC9100192DA9 /* Info.plist */,
 			);
 			path = ReduxSwiftExamples;
+			sourceTree = "<group>";
+		};
+		054D8A6D218629B600192DA9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				054D8A6E218629B600192DA9 /* ReduxSwift.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
