@@ -13,7 +13,6 @@ public final class Store<State> where State: StoreState {
     private typealias ListenerKey = Int
 
     private var listeners = [ListenerKey: Listener]()
-    private var orderedListeners = [ListenerKey]()
     private let reducers: [StoreReducer]
 
     private var state: State {
@@ -32,7 +31,8 @@ public final class Store<State> where State: StoreState {
     public func subscribe<Listenable: StoreListenable>(_ listener: Listenable) where Listenable.BoundState.State == State {
         let identifier = listener.hashValue
 
-        orderedListeners.append(identifier)
+        // subscribe to store changes with a callback closure
+        // in order to type erase the BoundState of StoreListenable.
         listeners[identifier] = { [weak listener] state in
             guard let listener = listener else { return }
             guard let boundState = state as? Listenable.BoundState.State else { return }
@@ -48,8 +48,6 @@ public final class Store<State> where State: StoreState {
 
     public func unsubscribe<Listenable: StoreListenable>(_ listener: Listenable) {
         let identifier = listener.hashValue
-
-        orderedListeners = orderedListeners.filter { $0.hashValue != identifier }
         listeners.removeValue(forKey: identifier)
     }
 
