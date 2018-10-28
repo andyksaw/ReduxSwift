@@ -2,8 +2,8 @@
 //  ReduxSwiftTests.swift
 //  ReduxSwiftTests
 //
-//  Created by andysaw on 2018/10/28.
-//  Copyright © 2018 andysaw. All rights reserved.
+//  Created by Andy Saw on 2018/10/28.
+//  Copyright © 2018 andyksaw. All rights reserved.
 //
 
 import XCTest
