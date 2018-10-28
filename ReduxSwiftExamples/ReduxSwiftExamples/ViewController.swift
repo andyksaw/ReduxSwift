@@ -9,39 +9,6 @@
 import UIKit
 import ReduxSwift
 
-struct AppState: StoreState {
-    var number: Int
-}
-
-let initialState = AppState(number: 0)
-let store = Store<AppState>(initialState, reducers: [
-    CounterReducer()
-])
-
-final class CounterReducer: StoreReducer {
-    func reduce<Action, State>(with action: Action, currentState: State) -> State where Action : StoreAction, State : StoreState {
-        guard var state = currentState as? AppState else { return currentState }
-
-        switch action {
-        case let action as IncrementCounterAction:
-            state.number += action.payload.amount
-
-        default:
-            return currentState
-        }
-
-        return state as! State
-    }
-}
-
-struct IncrementCounterAction: StoreAction {
-    struct Payload {
-        let amount: Int
-    }
-    var payload: Payload
-}
-
-
 class ViewController: UIViewController, StoreListenable {
     struct BoundState: StoreStateSlice {
         typealias State = AppState
