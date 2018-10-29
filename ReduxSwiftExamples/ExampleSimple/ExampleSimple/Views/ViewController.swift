@@ -10,6 +10,12 @@ import UIKit
 import ReduxSwift
 
 class ViewController: UIViewController, StoreListenable {
+    /// BoundState specifies what properties of the app's
+    /// state that we want to observe for changes. This prevents
+    /// unrelated state changes causing updates to our View layer.
+    ///
+    /// In this case we only want to take the `number` value
+    /// which can be either incremented or decremented.
     struct BoundState: StoreStateSlice {
         typealias State = AppState
 

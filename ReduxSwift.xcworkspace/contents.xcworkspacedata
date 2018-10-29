@@ -4,7 +4,14 @@
    <FileRef
       location = "group:ReduxSwift.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:/Users/andysaw/Documents/Dev/ios/ReduxSwift/ReduxSwiftExamples/ExampleSimple.xcodeproj">
-   </FileRef>
+   <Group
+      location = "container:"
+      name = "Examples">
+      <FileRef
+         location = "group:ReduxSwiftExamples/ExampleSimple/ExampleSimple.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:ReduxSwiftExamples/ExampleMiddleware/ExampleMiddleware.xcodeproj">
+      </FileRef>
+   </Group>
 </Workspace>
