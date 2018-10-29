@@ -14,8 +14,9 @@ public final class Store<State> where State: StoreState {
 
     private var listeners = [ListenerKey: Listener]()
     private let reducers: [StoreReducer]
+    private let middleware: [StoreMiddleware]
 
-    private var state: State {
+    private(set) var state: State {
         didSet {
             listeners.forEach { (_, propagateState) in
                 propagateState(state)
@@ -23,9 +24,10 @@ public final class Store<State> where State: StoreState {
         }
     }
 
-    public init(_ initialState: State, reducers: [StoreReducer]) {
+    public init(_ initialState: State, reducers: [StoreReducer], middleware: [StoreMiddleware] = []) {
         self.state = initialState
         self.reducers = reducers
+        self.middleware = middleware
     }
 
     public func subscribe<Listenable: StoreListenable>(_ listener: Listenable) where Listenable.BoundState.State == State {
@@ -51,9 +53,19 @@ public final class Store<State> where State: StoreState {
         listeners.removeValue(forKey: identifier)
     }
 
-    public func dispatch<Action: StoreAction>(action: Action) {
+    public func dispatch<Action: StoreAction, TargetStore: Store>(action: Action, store: TargetStore) {
+        var actionToDispatch: Action? = nil
+        for m in middleware {
+            guard let newAction = m.handle(action: action, store: store) else { return }
+            actionToDispatch = newAction
+        }
+
+        if actionToDispatch == nil {
+            return
+        }
+
         state = reducers.reduce(into: state) { currentState, reducer in
-            currentState = reducer.reduce(with: action, currentState: currentState)
+            currentState = reducer.reduce(with: actionToDispatch!, currentState: currentState)
         }
     }
 }
@@ -75,4 +87,22 @@ public protocol StoreReducer {
 public protocol StoreAction {
     associatedtype Payload
     var payload: Payload { get set }
+}
+
+public class StoreMiddleware {
+    func handle<Action: StoreAction, State: StoreState>(action: Action, store: Store<State>) -> Action? {
+        return action
+    }
+}
+
+public class LoggingMiddleware: StoreMiddleware {
+    override func handle<Action, State>(action: Action, store: Store<State>) -> Action? where Action: StoreAction, State: StoreState {
+        print("State: \(store.state)")
+        print("Dispatching action: \(action.payload)")
+        return action
+    }
+
+    public override init() {
+        super.init()
+    }
 }

@@ -44,13 +44,15 @@ class ViewController: UIViewController, StoreListenable {
 
     @IBAction func incrementButtonTapped(_ sender: Any) {
         store.dispatch(
-            action: IncrementCounterAction(payload: .init(amount: 1))
+            action: IncrementCounterAction(payload: .init(amount: 1)),
+            store: store
         )
     }
 
     @IBAction func decrementButtonTapped(_ sender: Any) {
         store.dispatch(
-            action: IncrementCounterAction(payload: .init(amount: -1))
+            action: IncrementCounterAction(payload: .init(amount: -1)),
+            store: store
         )
     }
 }

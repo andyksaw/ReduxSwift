@@ -14,5 +14,7 @@ struct AppState: StoreState {
 
 let initialState = AppState(number: 0)
 let store = Store<AppState>(initialState, reducers: [
-    CounterReducer()
-    ])
+    CounterReducer(),
+], middleware: [
+    LoggingMiddleware(),
+])
