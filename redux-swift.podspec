@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "ReduxSwift"
+  s.name         = "redux-swift"
   s.version      = "0.1.1"
   s.summary      = "A basic implementation of Redux state-management in Swift"
 

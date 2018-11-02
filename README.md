@@ -5,13 +5,13 @@ A basic implementation of [Redux](https://redux.js.org/) state-management in Swi
 #### Carthage
 If you use Carthage to manage your dependencies, add the below to your `Cartfile`
 ```
-github "andyksaw/ReduxSwift" ~> 0.1.0
+github "andyksaw/ReduxSwift" ~> 0.1.1
 ```
 
 #### Cocoapods
 If you use Cocoapods to manage your dependencies, add the below to your `Podfile`
 ```
-pod 'ReduxSwift', '~> 0.1.0'
+pod 'redux-swift', '~> 0.1.1'
 ```
 
 ## Todo
@@ -22,4 +22,4 @@ pod 'ReduxSwift', '~> 0.1.0'
 - [ ] Unit tests
 
 ## Attribution
-Credit to the original creators of Redux
+Credit to the original creators of Redux, Dan Abramov and Andrew Clark
