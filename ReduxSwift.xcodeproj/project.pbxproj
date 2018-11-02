@@ -11,6 +11,9 @@
 		055B6A502185ACE000BED1E2 /* ReduxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 055B6A462185ACE000BED1E2 /* ReduxSwift.framework */; };
 		055B6A552185ACE000BED1E2 /* ReduxSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055B6A542185ACE000BED1E2 /* ReduxSwiftTests.swift */; };
 		055B6A572185ACE000BED1E2 /* ReduxSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 055B6A492185ACE000BED1E2 /* ReduxSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		05987ABA2187063C00C1C676 /* StoreReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05987AB92187063C00C1C676 /* StoreReducer.swift */; };
+		05987ABC2187065D00C1C676 /* StoreAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05987ABB2187065D00C1C676 /* StoreAction.swift */; };
+		05987AC0218706DC00C1C676 /* StoreListenable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05987ABF218706DC00C1C676 /* StoreListenable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +34,9 @@
 		055B6A4F2185ACE000BED1E2 /* ReduxSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReduxSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		055B6A542185ACE000BED1E2 /* ReduxSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduxSwiftTests.swift; sourceTree = "<group>"; };
 		055B6A562185ACE000BED1E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05987AB92187063C00C1C676 /* StoreReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreReducer.swift; sourceTree = "<group>"; };
+		05987ABB2187065D00C1C676 /* StoreAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreAction.swift; sourceTree = "<group>"; };
+		05987ABF218706DC00C1C676 /* StoreListenable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreListenable.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,9 @@
 				055B6A492185ACE000BED1E2 /* ReduxSwift.h */,
 				055B6A4A2185ACE000BED1E2 /* Info.plist */,
 				054D8A6A2185FDE000192DA9 /* Store.swift */,
+				05987AB92187063C00C1C676 /* StoreReducer.swift */,
+				05987ABB2187065D00C1C676 /* StoreAction.swift */,
+				05987ABF218706DC00C1C676 /* StoreListenable.swift */,
 			);
 			path = ReduxSwift;
 			sourceTree = "<group>";
@@ -199,6 +208,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05987AC0218706DC00C1C676 /* StoreListenable.swift in Sources */,
+				05987ABC2187065D00C1C676 /* StoreAction.swift in Sources */,
+				05987ABA2187063C00C1C676 /* StoreReducer.swift in Sources */,
 				054D8A6B2185FDE000192DA9 /* Store.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

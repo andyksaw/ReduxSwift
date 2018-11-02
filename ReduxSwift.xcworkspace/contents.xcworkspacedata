@@ -11,7 +11,7 @@
          location = "group:ReduxSwiftExamples/ExampleSimple/ExampleSimple.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:ReduxSwiftExamples/ExampleMiddleware/ExampleMiddleware.xcodeproj">
+         location = "group:ReduxSwiftExamples/ExampleAsync/ExampleAsync.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>

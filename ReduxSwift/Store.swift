@@ -14,7 +14,6 @@ public final class Store<State> where State: StoreState {
 
     private var listeners = [ListenerKey: Listener]()
     private let reducers: [StoreReducer]
-    private let middleware: [StoreMiddleware]
 
     private(set) var state: State {
         didSet {
@@ -24,17 +23,24 @@ public final class Store<State> where State: StoreState {
         }
     }
 
-    public init(_ initialState: State, reducers: [StoreReducer], middleware: [StoreMiddleware] = []) {
+    public init(_ initialState: State, reducers: [StoreReducer]) {
         self.state = initialState
         self.reducers = reducers
-        self.middleware = middleware
     }
 
+    /// Allows the given View to observe state changes in the store.
+    /// Every time the state changes, a slice of the state (represented
+    /// by a BoundState) will be returned to the View.
+    ///
+    /// The View *must* unsubscribe from the store when state changes
+    /// no longer need to be observed (eg. when the ViewController disappears).
+    ///
+    /// - Parameter listener: View to receive state changes
     public func subscribe<Listenable: StoreListenable>(_ listener: Listenable) where Listenable.BoundState.State == State {
         let identifier = listener.hashValue
 
         // subscribe to store changes with a callback closure
-        // in order to type erase the BoundState of StoreListenable.
+        // in order to type erase the BoundState of StoreListenable
         listeners[identifier] = { [weak listener] state in
             guard let listener = listener else { return }
             guard let boundState = state as? Listenable.BoundState.State else { return }
@@ -48,61 +54,36 @@ public final class Store<State> where State: StoreState {
         listener.stateDidUpdate(stateSlice)
     }
 
+    /// Stops the given View from receiving any further state changes
+    /// in the store.
+    ///
+    /// - Parameter listener: View to stop receiving state changes
     public func unsubscribe<Listenable: StoreListenable>(_ listener: Listenable) {
         let identifier = listener.hashValue
         listeners.removeValue(forKey: identifier)
     }
 
-    public func dispatch<Action: StoreAction, TargetStore: Store>(action: Action, store: TargetStore) {
-        var actionToDispatch: Action? = nil
-        for m in middleware {
-            guard let newAction = m.handle(action: action, store: store) else { return }
-            actionToDispatch = newAction
+    /// Dispatches an Action to request a change to the store's state
+    ///
+    /// - Parameters:
+    ///   - actionType: Action type to be dispatched
+    public func dispatch(actionType: StoreActionType) {
+        switch actionType {
+        case .action(let action):
+            func buildNewState() {
+                state = reducers.reduce(into: state) { currentState, reducer in
+                    currentState = reducer.reduce(with: action, currentState: currentState)
+                }
+            }
+            if Thread.isMainThread {
+                buildNewState()
+            } else {
+                DispatchQueue.main.sync(execute: buildNewState)
+            }
+
+        case .thunk(let action):
+            action(dispatch)
         }
 
-        if actionToDispatch == nil {
-            return
-        }
-
-        state = reducers.reduce(into: state) { currentState, reducer in
-            currentState = reducer.reduce(with: actionToDispatch!, currentState: currentState)
-        }
-    }
-}
-
-public protocol StoreStateSlice {
-    associatedtype State: StoreState
-    init(state: State)
-}
-
-public protocol StoreListenable: class, Hashable {
-    associatedtype BoundState: StoreStateSlice
-    func stateDidUpdate(_ state: BoundState)
-}
-
-public protocol StoreReducer {
-    func reduce<Action: StoreAction, State: StoreState>(with action: Action, currentState: State) -> State
-}
-
-public protocol StoreAction {
-    associatedtype Payload
-    var payload: Payload { get set }
-}
-
-public class StoreMiddleware {
-    func handle<Action: StoreAction, State: StoreState>(action: Action, store: Store<State>) -> Action? {
-        return action
-    }
-}
-
-public class LoggingMiddleware: StoreMiddleware {
-    override func handle<Action, State>(action: Action, store: Store<State>) -> Action? where Action: StoreAction, State: StoreState {
-        print("State: \(store.state)")
-        print("Dispatching action: \(action.payload)")
-        return action
-    }
-
-    public override init() {
-        super.init()
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="vxu-oX-WsS">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="KGw-yh-hIW">
+            <objects>
+                <viewController id="vxu-oX-WsS" customClass="ViewController" customModule="ExampleAsync" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="iXQ-uD-2cE">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="wXJ-0X-bbI">
+                                <rect key="frame" x="137.5" y="309.5" width="100" height="48.5"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="UK1-aD-3o6">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="20"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4P-zc-fUc">
+                                        <rect key="frame" x="0.0" y="28" width="100" height="20.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="100" id="k6y-2N-SAW"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="XYm-r6-Ul0">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="basic_cell" id="Ojj-ao-sbE">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ojj-ao-sbE" id="FrP-GZ-f7O">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="nFj-Ev-M71" firstAttribute="bottom" secondItem="XYm-r6-Ul0" secondAttribute="bottom" id="2KK-5N-vFa"/>
+                            <constraint firstItem="XYm-r6-Ul0" firstAttribute="top" secondItem="nFj-Ev-M71" secondAttribute="top" id="9Pf-yM-TLc"/>
+                            <constraint firstItem="XYm-r6-Ul0" firstAttribute="leading" secondItem="nFj-Ev-M71" secondAttribute="leading" id="L8r-3J-NbO"/>
+                            <constraint firstItem="nFj-Ev-M71" firstAttribute="trailing" secondItem="XYm-r6-Ul0" secondAttribute="trailing" id="qtg-Eu-uAu"/>
+                            <constraint firstItem="wXJ-0X-bbI" firstAttribute="centerY" secondItem="iXQ-uD-2cE" secondAttribute="centerY" id="shZ-59-8Zy"/>
+                            <constraint firstItem="wXJ-0X-bbI" firstAttribute="centerX" secondItem="iXQ-uD-2cE" secondAttribute="centerX" id="vpb-bp-3ha"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="nFj-Ev-M71"/>
+                    </view>
+                    <connections>
+                        <outlet property="loadingStackView" destination="wXJ-0X-bbI" id="2gY-Ro-XKD"/>
+                        <outlet property="tableView" destination="XYm-r6-Ul0" id="0I9-PH-nLS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LSB-d9-GSJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="655.20000000000005" y="-347.67616191904051"/>
+        </scene>
+    </scenes>
+</document>

@@ -13,8 +13,7 @@ struct AppState: StoreState {
 }
 
 let initialState = AppState(number: 0)
-let store = Store<AppState>(initialState, reducers: [
+
+let store = Store(initialState, reducers: [
     CounterReducer(),
-], middleware: [
-    LoggingMiddleware(),
 ])
