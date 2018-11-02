@@ -14,4 +14,10 @@
          location = "group:ReduxSwiftExamples/ExampleAsync/ExampleAsync.xcodeproj">
       </FileRef>
    </Group>
+   <FileRef
+      location = "group:README.md">
+   </FileRef>
+   <FileRef
+      location = "group:/Users/andysaw/Documents/Dev/ios/ReduxSwift/LICENSE.md">
+   </FileRef>
 </Workspace>
