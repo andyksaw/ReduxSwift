@@ -49,16 +49,16 @@ class ViewController: UIViewController, StoreListenable {
     }
 
     @IBAction func incrementButtonTapped(_ sender: Any) {
+        let incrementAction = IncrementCounterAction(payload: .init(amount: 1))
         store.dispatch(
-            action: IncrementCounterAction(payload: .init(amount: 1)),
-            store: store
+            actionType: .action(incrementAction)
         )
     }
 
     @IBAction func decrementButtonTapped(_ sender: Any) {
+        let decrementAction = IncrementCounterAction(payload: .init(amount: -1))
         store.dispatch(
-            action: IncrementCounterAction(payload: .init(amount: -1)),
-            store: store
+            actionType: .action(decrementAction)
         )
     }
 }
