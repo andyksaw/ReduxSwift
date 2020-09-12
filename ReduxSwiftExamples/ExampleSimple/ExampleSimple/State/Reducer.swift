@@ -9,6 +9,7 @@
 import ReduxSwift
 
 final class CounterReducer: StoreReducer {
+
     func reduce<State>(with action: StoreAction, currentState: State) -> State where State : StoreState {
         guard var state = currentState as? AppState else { return currentState }
 

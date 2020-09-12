@@ -9,7 +9,7 @@
 import UIKit
 import ReduxSwift
 
-class ViewController: UIViewController, StoreListenable {
+class ViewController: UIViewController, StoreObservable {
     /// BoundState specifies what properties of the app's
     /// state that we want to observe for changes. This prevents
     /// unrelated state changes causing updates to our View layer.

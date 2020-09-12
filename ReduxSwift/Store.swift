@@ -6,84 +6,75 @@
 //  Copyright © 2018 andyksaw. All rights reserved.
 //
 
-public protocol StoreState {}
+public final class Store<State: StoreStorable> {
 
-public final class Store<State> where State: StoreState {
-    private typealias Listener = (StoreState) -> Void
-    private typealias ListenerKey = Int
+    fileprivate typealias Observer = (State) -> Void
 
-    private var listeners = [ListenerKey: Listener]()
-    private let reducers: [StoreReducer]
+    private var observers = [ObjectIdentifier: Observer]()
+    private let reducers: [AnyStoreReducer<State>]
 
     private(set) var state: State {
         didSet {
-            listeners.forEach { (_, propagateState) in
-                propagateState(state)
+            observers.values.forEach { observer in
+                observer(state)
             }
         }
     }
 
-    public init(_ initialState: State, reducers: [StoreReducer]) {
+    public init(_ initialState: State, reducers: [AnyStoreReducer<State>]) {
         self.state = initialState
         self.reducers = reducers
     }
+}
+
+public extension Store {
 
     /// Allows the given View to observe state changes in the store.
-    /// Every time the state changes, a slice of the state (represented
-    /// by a BoundState) will be returned to the View.
     ///
-    /// The View *must* unsubscribe from the store when state changes
-    /// no longer need to be observed (eg. when the ViewController disappears).
+    /// Every time the state changes, a slice of the state will be returned to the given observer.
     ///
-    /// - Parameter listener: View to receive state changes
-    public func subscribe<Listenable: StoreListenable>(_ listener: Listenable) where Listenable.BoundState.State == State {
-        let identifier = listener.hashValue
+    /// - Parameter observer: Class to be notified of state changes
+    ///
+    func subscribe<Observable: StoreObservable>(_ observingClass: Observable) where Observable.StateSlice.ParentState == State {
+        let identifier = ObjectIdentifier(observingClass)
 
-        // subscribe to store changes with a callback closure
-        // in order to type erase the BoundState of StoreListenable
-        listeners[identifier] = { [weak listener] state in
-            guard let listener = listener else { return }
-            guard let boundState = state as? Listenable.BoundState.State else { return }
-            let stateSlice = Listenable.BoundState.init(state: boundState)
-            listener.stateDidUpdate(stateSlice)
+        observers[identifier] = { [weak observingClass] state in
+            guard let observingClass = observingClass else { return }
+            let stateSlice = Observable.StateSlice.init(from: state)
+            observingClass.stateDidUpdate(to: stateSlice)
         }
 
-        // send the current state to a listener immediately when it
+        // Send the current state to a listener immediately when it
         // subscribes so that it can display something if needed
-        let stateSlice = Listenable.BoundState.init(state: state)
-        listener.stateDidUpdate(stateSlice)
+        let stateSlice = Observable.StateSlice.init(from: state)
+        observingClass.stateDidUpdate(to: stateSlice)
     }
 
     /// Stops the given View from receiving any further state changes
     /// in the store.
     ///
-    /// - Parameter listener: View to stop receiving state changes
-    public func unsubscribe<Listenable: StoreListenable>(_ listener: Listenable) {
-        let identifier = listener.hashValue
-        listeners.removeValue(forKey: identifier)
+    /// - Parameter observer: View to stop receiving state changes
+    ///
+    func unsubscribe<Observable: StoreObservable>(_ observer: Observable) {
+        let identifier = ObjectIdentifier(observer)
+
+        observers.removeValue(forKey: identifier)
     }
 
-    /// Dispatches an Action to request a change to the store's state
+    /// Dispatches an Action to request that the store state be mutated
     ///
-    /// - Parameters:
-    ///   - actionType: Action type to be dispatched
-    public func dispatch(actionType: StoreActionType) {
-        switch actionType {
-        case .action(let action):
-            func buildNewState() {
-                state = reducers.reduce(into: state) { currentState, reducer in
-                    currentState = reducer.reduce(with: action, currentState: currentState)
-                }
+    /// - Parameter action: Action type to be dispatched
+    ///
+    func dispatch(action: StoreActionable) {
+        func reduceNewState() {
+            state = reducers.reduce(into: state) { combinedState, reducer in
+                combinedState = reducer.reduce(with: action, currentState: combinedState)
             }
-            if Thread.isMainThread {
-                buildNewState()
-            } else {
-                DispatchQueue.main.sync(execute: buildNewState)
-            }
-
-        case .thunk(let action):
-            action(dispatch)
         }
-
+        if Thread.isMainThread {
+            reduceNewState()
+        } else {
+            DispatchQueue.main.sync(execute: reduceNewState)
+        }
     }
 }

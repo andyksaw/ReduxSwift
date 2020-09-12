@@ -7,11 +7,15 @@
 //
 
 public protocol StoreStateSlice: Equatable {
+
     associatedtype State: StoreState
+    
     init(state: State)
 }
 
-public protocol StoreListenable: class, Hashable {
+public protocol StoreObservable: AnyObject {
+
     associatedtype BoundState: StoreStateSlice
+
     func stateDidUpdate(_ state: BoundState)
 }
