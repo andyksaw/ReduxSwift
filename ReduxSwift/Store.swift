@@ -14,6 +14,8 @@ public final class Store<State: StoreStorable> {
     private let reducers: [AnyStoreReducer<State>]
     private var middleware: [StoreMiddleware]
 
+    private lazy var middlewareChain = middlewareWrapper(at: 0)
+
     public private(set) var state: State {
         didSet {
             observers.values.forEach { observer in
@@ -27,7 +29,7 @@ public final class Store<State: StoreStorable> {
         self.reducers = reducers
         self.middleware = middleware
 
-        setupMiddlewareChain()
+        setupDispatchMiddleware()
     }
 }
 
@@ -70,17 +72,13 @@ public extension Store {
     /// - Parameter action: Action type to be dispatched
     ///
     func dispatch(action: StoreActionable) {
-        guard let firstMiddleware = middleware.first else {
-            preconditionFailure("DispatchMiddleware must be added to end of middleware chain")
-        }
-        firstMiddleware.handle(store: self, action: action, next: middlewareWrapper(at: 1))
+        middlewareChain(action)
     }
 }
 
 extension Store {
 
     struct DispatchDelegateMiddleware: StoreMiddleware {
-        var next: StoreMiddleware?
         let onHandle: (StoreActionable) -> Void
 
         func handle<State: StoreStorable>(store: Store<State>, action: StoreActionable, next: StoreMiddleware.NextMiddleware) {
@@ -88,8 +86,9 @@ extension Store {
         }
     }
 
-    private func setupMiddlewareChain() {
+    private func setupDispatchMiddleware() {
         let dispatchMiddleware = DispatchDelegateMiddleware { [weak self] action in
+            assert(Thread.isMainThread)
             self?.reduceState(with: action)
         }
         middleware.append(dispatchMiddleware)
