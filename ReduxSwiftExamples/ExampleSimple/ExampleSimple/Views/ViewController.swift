@@ -10,18 +10,19 @@ import UIKit
 import ReduxSwift
 
 class ViewController: UIViewController, StoreObservable {
-    /// BoundState specifies what properties of the app's
-    /// state that we want to observe for changes. This prevents
-    /// unrelated state changes causing updates to our View layer.
+
+    /// StateSlice specifies what properties of the app's state that we want to observe for changes.
+    /// This prevents unrelated state changes causing updates to our View layer.
     ///
-    /// In this case we only want to take the `number` value
-    /// which can be either incremented or decremented.
-    struct BoundState: StoreStateSlice {
-        typealias State = AppState
+    /// In this case we only want to take the `number` value which can be incremented or
+    /// decremented with buttons.
+    struct StateSlice: StoreStateSlicable {
+
+        typealias ParentState = AppState
 
         let number: Int
 
-        init(state: State) {
+        init(from state: AppState) {
             number = state.number
         }
     }
@@ -42,24 +43,20 @@ class ViewController: UIViewController, StoreObservable {
         store.unsubscribe(self)
     }
 
-    func stateDidUpdate(_ state: BoundState) {
+    func stateDidUpdate(to state: StateSlice) {
         numberLabel.text = String(state.number)
         incrementButton.isEnabled = state.number < 10
         decrementButton.isEnabled = state.number > 0
     }
 
     @IBAction func incrementButtonTapped(_ sender: Any) {
-        let incrementAction = IncrementCounterAction(payload: .init(amount: 1))
-        store.dispatch(
-            actionType: .action(incrementAction)
-        )
+        let incrementAction = IncrementCounterAction(amount: 1)
+        store.dispatch(action: incrementAction)
     }
 
     @IBAction func decrementButtonTapped(_ sender: Any) {
-        let decrementAction = IncrementCounterAction(payload: .init(amount: -1))
-        store.dispatch(
-            actionType: .action(decrementAction)
-        )
+        let decrementAction = IncrementCounterAction(amount: -1)
+        store.dispatch(action: decrementAction)
     }
 }
 

@@ -8,7 +8,7 @@
 
 import ReduxSwift
 
-struct IncrementCounterAction: StoreAction {
+struct IncrementCounterAction: StoreActionable {
     
     let amount: Int
 }

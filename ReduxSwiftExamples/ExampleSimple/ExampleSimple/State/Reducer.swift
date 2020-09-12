@@ -8,19 +8,21 @@
 
 import ReduxSwift
 
-final class CounterReducer: StoreReducer {
+final class CounterReducer: StoreStateReducable {
 
-    func reduce<State>(with action: StoreAction, currentState: State) -> State where State : StoreState {
-        guard var state = currentState as? AppState else { return currentState }
+    typealias State = AppState
+
+    func reduce(with action: StoreActionable, currentState: State) -> State {
+        var state = currentState
 
         switch action {
         case let action as IncrementCounterAction:
-            state.number += action.payload.amount
+            state.number += action.amount
 
         default:
             return currentState
         }
 
-        return state as! State
+        return state
     }
 }

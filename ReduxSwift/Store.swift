@@ -12,8 +12,9 @@ public final class Store<State: StoreStorable> {
 
     private var observers = [ObjectIdentifier: Observer]()
     private let reducers: [AnyStoreReducer<State>]
+    private var middleware: [StoreMiddleware]
 
-    private(set) var state: State {
+    public private(set) var state: State {
         didSet {
             observers.values.forEach { observer in
                 observer(state)
@@ -21,9 +22,12 @@ public final class Store<State: StoreStorable> {
         }
     }
 
-    public init(_ initialState: State, reducers: [AnyStoreReducer<State>]) {
+    public init(initialState: State, reducers: [AnyStoreReducer<State>], middleware: [StoreMiddleware] = []) {
         self.state = initialState
         self.reducers = reducers
+        self.middleware = middleware
+
+        setupMiddlewareChain()
     }
 }
 
@@ -44,8 +48,8 @@ public extension Store {
             observingClass.stateDidUpdate(to: stateSlice)
         }
 
-        // Send the current state to a listener immediately when it
-        // subscribes so that it can display something if needed
+        // Send the current state to the observer immediately so that it can
+        // prepare its own initial state
         let stateSlice = Observable.StateSlice.init(from: state)
         observingClass.stateDidUpdate(to: stateSlice)
     }
@@ -66,15 +70,43 @@ public extension Store {
     /// - Parameter action: Action type to be dispatched
     ///
     func dispatch(action: StoreActionable) {
-        func reduceNewState() {
-            state = reducers.reduce(into: state) { combinedState, reducer in
-                combinedState = reducer.reduce(with: action, currentState: combinedState)
+        guard let handler = middleware.first else {
+            preconditionFailure("DispatchMiddleware must be added to end of middleware chain")
+        }
+        handler.handle(store: self, action: action)
+    }
+}
+
+extension Store {
+
+    struct DispatchDelegateMiddleware: StoreMiddleware {
+        var next: StoreMiddleware?
+        let onHandle: (StoreActionable) -> Void
+
+        func handle<State: StoreStorable>(store: Store<State>, action: StoreActionable) {
+            onHandle(action)
+        }
+    }
+
+    private func setupMiddlewareChain() {
+        let dispatchMiddleware = DispatchDelegateMiddleware { [weak self] action in
+            self?.reduceState(with: action)
+        }
+        middleware.append(dispatchMiddleware)
+
+        var assignedMiddleware = middleware
+
+        for i in 0..<assignedMiddleware.count {
+            if i < middleware.count - 1 {
+                assignedMiddleware[i].next = middleware[i + 1]
             }
         }
-        if Thread.isMainThread {
-            reduceNewState()
-        } else {
-            DispatchQueue.main.sync(execute: reduceNewState)
+        middleware = assignedMiddleware
+    }
+
+    private func reduceState(with action: StoreActionable) {
+        state = reducers.reduce(into: state) { combinedState, reducer in
+            combinedState = reducer.reduce(with: action, currentState: combinedState)
         }
     }
 }

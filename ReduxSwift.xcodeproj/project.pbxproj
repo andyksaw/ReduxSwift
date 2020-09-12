@@ -19,6 +19,7 @@
 		A18C85EE250D389D00FB787D /* StoreStateSlicable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18C85ED250D389D00FB787D /* StoreStateSlicable.swift */; };
 		A18C85F0250D3B1600FB787D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18C85EF250D3B1600FB787D /* StoreTests.swift */; };
 		A18C85F2250D3CC400FB787D /* AnyStoreReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18C85F1250D3CC400FB787D /* AnyStoreReducer.swift */; };
+		A18C85F4250D405700FB787D /* StoreMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18C85F3250D405700FB787D /* StoreMiddleware.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		A18C85ED250D389D00FB787D /* StoreStateSlicable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStateSlicable.swift; sourceTree = "<group>"; };
 		A18C85EF250D3B1600FB787D /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
 		A18C85F1250D3CC400FB787D /* AnyStoreReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyStoreReducer.swift; sourceTree = "<group>"; };
+		A18C85F3250D405700FB787D /* StoreMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreMiddleware.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				05987ABF218706DC00C1C676 /* StoreObservable.swift */,
 				A18C85E9250D37AA00FB787D /* StoreStorable.swift */,
 				A18C85ED250D389D00FB787D /* StoreStateSlicable.swift */,
+				A18C85F3250D405700FB787D /* StoreMiddleware.swift */,
 			);
 			path = ReduxSwift;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 			files = (
 				A18C85EE250D389D00FB787D /* StoreStateSlicable.swift in Sources */,
 				A18C85EA250D37AA00FB787D /* StoreStorable.swift in Sources */,
+				A18C85F4250D405700FB787D /* StoreMiddleware.swift in Sources */,
 				05987AC0218706DC00C1C676 /* StoreObservable.swift in Sources */,
 				A18C85EC250D380400FB787D /* StoreActionCreatable.swift in Sources */,
 				05987ABC2187065D00C1C676 /* StoreActionable.swift in Sources */,

@@ -8,12 +8,15 @@
 
 import ReduxSwift
 
-struct AppState: StoreState {
+struct AppState: StoreStorable {
     var number: Int
 }
 
 let initialState = AppState(number: 0)
 
-let store = Store(initialState, reducers: [
-    CounterReducer(),
-])
+let store = Store(
+    initialState: initialState,
+    reducers: [
+        AnyStoreReducer(CounterReducer()),
+    ]
+)
