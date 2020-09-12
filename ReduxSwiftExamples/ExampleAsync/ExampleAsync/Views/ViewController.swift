@@ -9,7 +9,7 @@
 import UIKit
 import ReduxSwift
 
-class ViewController: UIViewController, StoreListenable {
+class ViewController: UIViewController, StoreObservable {
     struct BoundState: StoreStateSlice, Equatable {
         typealias State = AppState
 
@@ -48,9 +48,9 @@ class ViewController: UIViewController, StoreListenable {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        store.dispatch(
-            actionType: FetchPeopleAction.make(with: .init(limit: 5, offset: 0))
-        )
+//        store.dispatch(
+//            actionType: FetchPeopleAction.make(with: .init(limit: 5, offset: 0))
+//        )
     }
 
     func stateDidUpdate(_ state: BoundState) {

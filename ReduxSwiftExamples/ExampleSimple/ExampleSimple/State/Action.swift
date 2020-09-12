@@ -8,9 +8,7 @@
 
 import ReduxSwift
 
-struct IncrementCounterAction: StoreAction {
-    struct Payload {
-        let amount: Int
-    }
-    var payload: Payload
+struct IncrementCounterAction: StoreActionable {
+    
+    let amount: Int
 }

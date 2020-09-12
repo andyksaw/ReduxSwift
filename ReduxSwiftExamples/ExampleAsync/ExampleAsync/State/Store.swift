@@ -19,5 +19,5 @@ let initialState = AppState(
 )
 
 let store = Store(initialState, reducers: [
-    PeopleReducer()
+//    AnyStoreReducer<AppState>(PeopleReducer())
 ])
