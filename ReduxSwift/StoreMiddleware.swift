@@ -8,7 +8,7 @@
 
 public protocol StoreMiddleware {
 
-    var next: StoreMiddleware? { get set }
+    typealias NextMiddleware = (StoreActionable) -> Void
 
-    func handle<State: StoreStorable>(store: Store<State>, action: StoreActionable)
+    func handle<State: StoreStorable>(store: Store<State>, action: StoreActionable, next: NextMiddleware)
 }

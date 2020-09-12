@@ -70,10 +70,10 @@ public extension Store {
     /// - Parameter action: Action type to be dispatched
     ///
     func dispatch(action: StoreActionable) {
-        guard let handler = middleware.first else {
+        guard let firstMiddleware = middleware.first else {
             preconditionFailure("DispatchMiddleware must be added to end of middleware chain")
         }
-        handler.handle(store: self, action: action)
+        firstMiddleware.handle(store: self, action: action, next: middlewareWrapper(at: 1))
     }
 }
 
@@ -83,7 +83,7 @@ extension Store {
         var next: StoreMiddleware?
         let onHandle: (StoreActionable) -> Void
 
-        func handle<State: StoreStorable>(store: Store<State>, action: StoreActionable) {
+        func handle<State: StoreStorable>(store: Store<State>, action: StoreActionable, next: StoreMiddleware.NextMiddleware) {
             onHandle(action)
         }
     }
@@ -93,20 +93,21 @@ extension Store {
             self?.reduceState(with: action)
         }
         middleware.append(dispatchMiddleware)
-
-        var assignedMiddleware = middleware
-
-        for i in 0..<assignedMiddleware.count {
-            if i < middleware.count - 1 {
-                assignedMiddleware[i].next = middleware[i + 1]
-            }
-        }
-        middleware = assignedMiddleware
     }
 
     private func reduceState(with action: StoreActionable) {
         state = reducers.reduce(into: state) { combinedState, reducer in
             combinedState = reducer.reduce(with: action, currentState: combinedState)
+        }
+    }
+
+    private func middlewareWrapper(at index: Int) -> StoreMiddleware.NextMiddleware {
+        guard index < middleware.count else { return { _ in } }
+
+        let currentMiddleware = middleware[index]
+        return { [weak self] action in
+            guard let self = self else { return }
+            currentMiddleware.handle(store: self, action: action, next: self.middlewareWrapper(at: index + 1))
         }
     }
 }
