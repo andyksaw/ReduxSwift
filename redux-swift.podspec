@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "redux-swift"
-  s.version      = "0.1.1"
+  s.version      = "0.2.0"
   s.summary      = "A basic implementation of Redux state-management in Swift"
 
   # This description is used to generate tags and improve search results.
@@ -65,7 +65,7 @@ A basic implementation of Redux state-management in Swift. Additionally has firs
   s.platform     = :ios, "8.0"
   # s.platform     = :ios, "5.0"
 
-  s.swift_version = '4.0'
+  s.swift_version = '5.0'
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"

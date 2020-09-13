@@ -1,17 +1,23 @@
 # ReduxSwift
-A basic implementation of [Redux](https://redux.js.org/) state-management in Swift
+A Swift implementation of [Redux](https://redux.js.org/) state-management
 
 ## Installation
+#### Swift Package Manager
+If you use Swift Package Manager to manage your dependencies, add the below to your `Package.swift` file
+```
+.package(url: "https://github.com/andyksaw/ReduxSwift.git", from: "0.2.0")
+```
+
 #### Carthage
 If you use Carthage to manage your dependencies, add the below to your `Cartfile`
 ```
-github "andyksaw/ReduxSwift" ~> 0.1.1
+github "andyksaw/ReduxSwift" ~> 0.2.0
 ```
 
 #### Cocoapods
 If you use Cocoapods to manage your dependencies, add the below to your `Podfile`
 ```
-pod 'redux-swift', '~> 0.1.1'
+pod 'redux-swift', '~> 0.2.0'
 ```
 
 ## Getting Started
